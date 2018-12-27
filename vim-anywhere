@@ -45,3 +45,4 @@ fi
 
 inotifywait -e close_write $file
 cat $file | setclip
+shred -x $file && rm $file
