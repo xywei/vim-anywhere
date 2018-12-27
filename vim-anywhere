@@ -36,9 +36,12 @@ if [[ $vim == 'gvim' ]]; then
 else
     if [[ $terminal == 'alacritty' ]] || [[ $terminal == 'urxvt' ]]; then
         $terminal -e $vim $file
+    elif [[ $terminal == 'kitty' ]]; then
+        $terminal -1 $vim $file
     else
         $terminal -e "$vim $file"
     fi
 fi
 
+inotifywait -e close_write $file
 cat $file | setclip
