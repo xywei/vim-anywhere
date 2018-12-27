@@ -9,6 +9,7 @@ if [[ $1 == "-h" ]] || [[ $1 == "--help" ]]; then
     exit 0
 fi
 
+scriptin="$(dirname $BASH_SOURCE)/vim-scriptin"
 vim=$1
 terminal=$2
 
@@ -35,14 +36,14 @@ if [[ $vim == 'gvim' ]]; then
     $vim $file
 else
     if [[ $terminal == 'alacritty' ]] || [[ $terminal == 'urxvt' ]]; then
-        $terminal -e $vim $file
+        $terminal -e $vim -s $scriptin $file
     elif [[ $terminal == 'kitty' ]]; then
-        $terminal -1 $vim $file
+        $terminal -1 $vim -s $scriptin $file
     else
-        $terminal -e "$vim $file"
+        $terminal -e "$vim -s $scriptin $file"
     fi
 fi
 
-inotifywait -e close_write $file
+inotifywait -t 3600 -e close_write $file
 cat $file | setclip
 shred -x $file && rm $file
